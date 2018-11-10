@@ -17,6 +17,7 @@ import qualified Text.Blaze.Html5              as H
 import qualified Text.Digestive                as D
 import qualified Zureg.Config                  as Config
 import qualified Zureg.Database                as Database
+import qualified Zureg.Database.DynamoDB       as DynamoDB
 import           Zureg.Form
 import           Zureg.Model
 import qualified Zureg.ReCaptcha               as ReCaptcha
@@ -41,7 +42,7 @@ main = do
     dbConfig <- Config.section config "database"
     rcConfig <- Config.section config "recaptcha"
 
-    Database.withHandle dbConfig $ \db ->
+    DynamoDB.withHandle dbConfig $ \db ->
         ReCaptcha.withHandle rcConfig $ \recaptcha ->
         Serverless.main IO.stdin IO.stdout $ \req@Serverless.Request {..} ->
         case Serverless.requestPath req of

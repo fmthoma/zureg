@@ -12,6 +12,7 @@ import           System.Exit                (exitFailure)
 import qualified System.IO                  as IO
 import qualified Zureg.Config               as Config
 import qualified Zureg.Database             as Database
+import qualified Zureg.Database.DynamoDB    as DynamoDB
 
 main :: IO ()
 main = do
@@ -25,7 +26,7 @@ main = do
         [path] -> do
             exists <- doesFileExist path
             when exists $ fail $ path ++ " already exists"
-            Database.withHandle dbConfig $ \db -> do
+            DynamoDB.withHandle dbConfig $ \db -> do
                 uuids       <- Database.getRegistrantUuids db
                 registrants <- mapM (Database.getRegistrant db) uuids
                 BL.writeFile path $ A.encode registrants
